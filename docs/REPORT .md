@@ -1,6 +1,6 @@
 # Intelligent Courier Planning System: Final Report
 
-**Name:** Nisha Kumari  **Roll no.:** 2501060036  **Course / Lab:** Design and Analysis of Algorithms
+**Name:** Nisha Kumari  **Roll no.:** 2501060036  **Course / Lab:** Analysis & Design of Algorithms
 
 > Runtimes below were measured on the author's own computer (best of 3 runs,
 > fixed random seeds). Timings differ between computers; route lengths do not.
