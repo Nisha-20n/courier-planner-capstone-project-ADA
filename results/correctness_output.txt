@@ -1,0 +1,7 @@
+PASS  merge sort matches sorted() on 200 random lists (and is stable)
+PASS  knapsack DP equals brute force on 200 random cases
+PASS  Dijkstra equals Bellman-Ford on 100 random graphs
+PASS  routes are valid round trips; 2-opt never worse than nearest neighbour
+      worst length vs optimal (60 cases, 3-7 stops): nearest neighbour x1.24, with 2-opt x1.04
+
+All correctness tests passed.
