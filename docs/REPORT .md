@@ -1,6 +1,6 @@
 # Intelligent Courier Planning System: Final Report
 
-**Name:** _[Nisha Kumari]_  **Roll no.:** _[2501060036]_  **Course / Lab:** _[Design and Analysis of Algorithms]_
+**Name:** Nisha Kumari  **Roll no.:** 2501060036  **Course / Lab:** Design and Analysis of Algorithms
 
 > Runtimes below were measured on the author's own computer (best of 3 runs,
 > fixed random seeds). Timings differ between computers; route lengths do not.
@@ -74,13 +74,13 @@ trip 3 reaches F through B and C, because that is the shortest road path.)
 
 | Parcels | Stops in trip | Sort (ms) | Knapsack (ms) | Dijkstra (ms) | Nearest neighbour (ms) |
 |---|---|---|---|---|---|
-| 10 | 6 | 0.032 | 0.653 | 0.142 | 0.009 |
-| 50 | 16 | 0.192 | 2.993 | 1.012 | 0.035 |
-| 100 | 25 | 0.442 | 6.121 | 2.865 | 0.107 |
-| 250 | 41 | 1.415 | 17.891 | 16.400 | 0.323 |
-| 500 | 69 | 4.142 | 43.878 | 49.227 | 0.572 |
-| 1000 | 96 | 6.696 | 66.430 | 139.298 | 0.887 |
-| 2000 | 120 | 13.826 | 124.368 | 374.343 | 1.406 |
+| 10 | 6 | 0.027 | 0.645 | 0.138 | 0.009 |
+| 50 | 16 | 0.191 | 3.099 | 1.444 | 0.071 |
+| 100 | 25 | 0.780 | 5.904 | 2.930 | 0.073 |
+| 250 | 41 | 1.299 | 14.752 | 13.404 | 0.183 |
+| 500 | 69 | 2.829 | 31.452 | 47.408 | 0.492 |
+| 1000 | 96 | 6.498 | 62.822 | 139.696 | 1.019 |
+| 2000 | 120 | 14.093 | 136.365 | 370.079 | 2.799 |
 
 ![Experiment A chart](../results/pipeline_runtime.png)
 
@@ -88,30 +88,31 @@ trip 3 reaches F through B and C, because that is the shortest road path.)
 
 | Stops | Dijkstra (ms) | Nearest neighbour (ms) | 2-opt (ms) | NN length (km) | 2-opt length (km) | Shorter by |
 |---|---|---|---|---|---|---|
-| 5 | 0.116 | 0.007 | 0.056 | 20 | 20 | 0.0% |
-| 10 | 0.269 | 0.018 | 0.653 | 87 | 83 | 4.6% |
-| 20 | 0.919 | 0.051 | 6.533 | 183 | 159 | 13.1% |
-| 40 | 4.671 | 0.376 | 47.400 | 249 | 233 | 6.4% |
-| 80 | 29.734 | 1.180 | 465.137 | 624 | 532 | 14.7% |
-| 120 | 39.772 | 1.426 | 1761.402 | 800 | 719 | 10.1% |
+| 5 | 0.081 | 0.007 | 0.055 | 20 | 20 | 0.0% |
+| 10 | 0.273 | 0.017 | 0.704 | 87 | 83 | 4.6% |
+| 20 | 0.987 | 0.054 | 7.557 | 183 | 159 | 13.1% |
+| 40 | 4.136 | 0.178 | 47.938 | 249 | 233 | 6.4% |
+| 80 | 16.819 | 0.652 | 373.533 | 624 | 532 | 14.7% |
+| 120 | 41.113 | 1.403 | 1693.179 | 800 | 719 | 10.1% |
 
 ![Experiment B chart](../results/route_runtime.png)
 
 ### 5.4 Observations
-- **Merge sort** grew from 0.032 ms to 13.8 ms for 200x more parcels (about 430x),
-  which is slightly more than linear, as expected for n log n.
+- **Merge sort** grew from 0.027 ms to 14.1 ms for 200x more parcels (about 510x).
+  That is more than linear and in line with n log n growth (about 660x expected;
+  fixed overhead makes small inputs relatively slower).
 - **Knapsack DP** grew roughly in step with the number of parcels (200x more
-  parcels, about 190x more time) because capacity was fixed: O(n * capacity).
+  parcels, about 210x more time) because capacity was fixed: O(n * capacity).
   Doubling the van capacity would roughly double its time as well.
 - **Dijkstra** became the most expensive step in the pipeline for large inputs
-  (374 ms at 2000 parcels). With more parcels, a trip has more distinct stops
+  (370 ms at 2000 parcels). With more parcels, a trip has more distinct stops
   (6 -> 120) **and** the road network is larger, so one Dijkstra run per stop adds up.
-- **Nearest neighbour** is almost free (1.4 ms for 120 stops).
-- **2-opt** is the slowest step: 1761 ms for 120 stops, over 1000x the nearest
-  neighbour time. Doubling stops from 40 to 80 multiplied its time by about 10,
-  which is consistent with the O(k^3) cost per pass of this implementation
-  (the number of passes also varies). In exchange it shortened the route by
-  4-15% in these runs (the gain varies from case to case).
+- **Nearest neighbour** is almost free (2.8 ms for 120 stops).
+- **2-opt** is the slowest step: 1693 ms for 120 stops, over 1000x the nearest
+  neighbour time. Doubling stops from 40 to 80 multiplied its time by about 8
+  (47.9 ms to 373.5 ms), which matches the O(k^3) cost per pass of this
+  implementation. In exchange it shortened the route by 4-15% in these runs
+  (the gain varies from case to case).
 
 ### 5.5 Optimization suggestions
 1. **2-opt with delta evaluation.** The current code recomputes the whole route
@@ -155,9 +156,24 @@ python tests/test_correctness.py  # correctness evidence
 python benchmark.py               # runtime tables and charts (needs: pip install matplotlib)
 ```
 
-## 9. Screenshots
-_Add screenshots here before submitting:_
-1. Output of `python main.py --show-dp` (DP table and all trips)
-2. Output of `python tests/test_correctness.py`
-3. Output of `python benchmark.py`
-4. `results/pipeline_runtime.png` and `results/route_runtime.png`
+## 9. Screenshots (output evidence)
+
+**Figure 1.** Planner output: input, sorted parcels and the DP table (`python main.py --show-dp`).
+
+![Figure 1](../screenshots/terminal%20output%201.png)
+
+**Figure 2.** Planner output: packing plan, route and distance for each trip.
+
+![Figure 2](../screenshots/terminal%20output%202.png)
+
+**Figure 3.** Correctness tests (`python tests/test_correctness.py`).
+
+![Figure 3](../screenshots/terminal%20output%203.png)
+
+**Figure 4.** Benchmark, Experiment A: pipeline runtime vs number of parcels (`python benchmark.py`).
+
+![Figure 4](../screenshots/terminal%20output%204.png)
+
+**Figure 5.** Benchmark, Experiment B: route planning vs number of stops.
+
+![Figure 5](../screenshots/terminal%20output%205.png)
